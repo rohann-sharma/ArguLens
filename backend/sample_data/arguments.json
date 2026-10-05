@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "title": "Strong argument",
+    "text": "According to the CDC report in 2023, regular handwashing reduces the spread of respiratory illnesses by up to 21%. Therefore, public health campaigns should emphasize hand hygiene."
+  },
+  {
+    "id": 2,
+    "title": "Argument with an unverifiable citation",
+    "text": "According to a 2024 Harvard study of 20,000 teenagers, 80% of teenagers who use Instagram experience depression. Therefore Instagram should be banned for people under 18."
+  },
+  {
+    "id": 3,
+    "title": "Argument with misleading evidence",
+    "text": "The sky is blue today. Thus, climate change is a complete hoax and unrelated to human activity."
+  },
+  {
+    "id": 4,
+    "title": "Argument containing a logical fallacy",
+    "text": "All politicians are corrupt. John is a politician, so John must be corrupt. Anyone who disagrees is just as corrupt."
+  },
+  {
+    "id": 5,
+    "title": "Argument with no evidence",
+    "text": "Pineapple on pizza is an absolute crime. People who like it just have bad taste."
+  }
+]
