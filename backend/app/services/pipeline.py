@@ -2,6 +2,7 @@ from app.services.extractor import extract_sentences, extract_claims_and_evidenc
 from app.services.verifier import verify_evidence
 from app.services.scorer import calculate_scores
 from app.services.nli import get_nli_pipeline
+from app.services.llm_service import assess_reasoning
 
 
 def process_text(text: str):
@@ -61,7 +62,8 @@ def process_text(text: str):
     if evidence and not sources:
         sources = [{"id": "s1", "name": "Cited source (unverified)", "url": None}]
 
-    return {
+    # Build intermediate dictionary before LLM call
+    extracted_data = {
         "claims":                    claims,
         "premises":                  premises,
         "conclusions":               conclusions,
@@ -76,3 +78,17 @@ def process_text(text: str):
         "warnings":                  warnings,
         "confidence_levels":         {"extraction": 0.85, "verification": 0.65},
     }
+
+    # Call LLM reasoning
+    llm_reasoning = assess_reasoning(extracted_data)
+    
+    if not llm_reasoning.get("enabled"):
+        warning_msg = "LLM reasoning assessment unavailable."
+        if llm_reasoning.get("error"):
+            warning_msg += f" ({llm_reasoning['error']})"
+        warnings.append(warning_msg)
+
+    # Attach to final payload
+    extracted_data["llm_reasoning"] = llm_reasoning
+
+    return extracted_data

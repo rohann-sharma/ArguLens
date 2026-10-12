@@ -50,6 +50,21 @@ class ComponentScores(BaseModel):
     logical_consistency: int
     source_verification: int
 
+class ClaimAssessment(BaseModel):
+    claim: str
+    support_status: str
+    explanation: str
+    reasoning_issue: Optional[str] = None
+    confidence: float
+
+class LlmReasoning(BaseModel):
+    enabled: bool
+    error: Optional[str] = None
+    claim_assessments: List[ClaimAssessment] = []
+    overall_reasoning_assessment: Optional[str] = None
+    key_strengths: List[str] = []
+    key_weaknesses: List[str] = []
+
 class AnalyzeResponse(BaseModel):
     claims: List[Claim]
     premises: List[str]
@@ -64,3 +79,4 @@ class AnalyzeResponse(BaseModel):
     overall_assessment: str
     warnings: List[str]
     confidence_levels: Dict[str, float]
+    llm_reasoning: LlmReasoning

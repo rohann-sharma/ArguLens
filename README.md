@@ -2,57 +2,38 @@
 
 ArguLens is an AI-powered Argument Quality, Evidence Verification, and Reasoning Analysis system.
 
-## Setup
+## Pipeline
+1. **NLP Extraction:** Extracts claims, premises, conclusions, and cited sources using `spaCy`.
+2. **Source Verification:** Automatically queries Crossref, OpenAlex, and PubMed to verify evidence support.
+3. **LLM Reasoning Assessment:** Uses Google Gemini (via `google-genai` SDK) to perform a structured claim-evidence reasoning assessment based on the extracted information.
+4. **Scoring:** Aggregates metrics to produce an overall quality score.
 
-### Backend
+## LLM Integration
+ArguLens integrates with Google Gemini to provide explainable reasoning logic without fabricating facts. The LLM analyzes the argument structure and verification results provided by the earlier pipeline stages.
 
-1. Navigate to the `backend` directory:
-   ```bash
-   cd backend
-   ```
-2. (Optional) Create a virtual environment:
-   ```bash
-   python -m venv venv
-   # Windows: venv\Scripts\activate
-   # macOS/Linux: source venv/bin/activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the API:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   The API will be available at `http://localhost:8000`.
+**To enable the LLM:**
+1. Copy `.env.example` to `.env` in the root directory.
+2. Set your `GEMINI_API_KEY` in `.env`.
+3. (Optional) Set `GEMINI_MODEL` to override the default `gemini-2.5-flash` model.
 
-### Frontend
+If the API key is not provided, ArguLens will fall back gracefully to the core NLP scoring and display a warning in the UI.
 
-1. Navigate to the `frontend` directory:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
-   The dashboard will be available at `http://localhost:5173`.
+## How to Run
 
-## Features
-- **Claim & Evidence Extraction**: Identifies main arguments and supporting evidence.
-- **Source Verification**: Distinguishes between verified, unverified, and non-existent sources.
-- **Reasoning Analysis**: Employs NLI to check claim-evidence relationships.
-- **Explainable Scoring**: Generates a detailed breakdown of argument quality.
-
-## Sample Data
-Check `backend/sample_data/arguments.json` for sample inputs to test.
-
-## Running Tests
-In the `backend` folder, run:
+**Backend:**
 ```bash
-pytest tests/
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --port 8003
 ```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend will be available at `http://localhost:5173`.

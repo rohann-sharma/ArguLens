@@ -386,6 +386,88 @@ function App() {
                   )}
                 </div>
 
+                {/* LLM Reasoning Assessment */}
+                {result.llm_reasoning && result.llm_reasoning.enabled && (
+                  <div className="bg-gray-900 border border-indigo-900/50 rounded-xl p-5 space-y-4 shadow-lg shadow-indigo-900/10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-3 pointer-events-none opacity-20">
+                      <Activity className="w-24 h-24 text-indigo-500" />
+                    </div>
+                    <h3 className="font-semibold text-indigo-300 border-b border-indigo-900/50 pb-2 relative z-10 flex items-center gap-2">
+                       LLM Reasoning Assessment
+                    </h3>
+                    
+                    <div className="space-y-4 relative z-10">
+                      <div>
+                        <h4 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Overall Assessment</h4>
+                        <p className="text-sm text-gray-300 bg-gray-950/50 p-3 rounded-lg border border-gray-800">
+                          {result.llm_reasoning.overall_reasoning_assessment}
+                        </p>
+                      </div>
+
+                      {result.llm_reasoning.claim_assessments?.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wider">Claim Analysis</h4>
+                          <div className="space-y-3">
+                            {result.llm_reasoning.claim_assessments.map((ca, i) => (
+                              <div key={i} className="bg-gray-950 border border-gray-800 p-3 rounded-lg space-y-2">
+                                <p className="text-sm font-medium text-gray-200">"{ca.claim}"</p>
+                                <div className="flex items-center gap-2">
+                                  <span className={`text-xs font-semibold px-2 py-0.5 rounded ${
+                                    ca.support_status === 'SUPPORTED' ? 'bg-green-900/30 text-green-400' :
+                                    ca.support_status === 'PARTIALLY_SUPPORTED' ? 'bg-yellow-900/30 text-yellow-400' :
+                                    ca.support_status === 'NOT_SUPPORTED' ? 'bg-red-900/30 text-red-400' :
+                                    'bg-gray-800 text-gray-400'
+                                  }`}>
+                                    {ca.support_status.replace(/_/g, ' ')}
+                                  </span>
+                                  {ca.confidence && (
+                                    <span className="text-xs text-gray-500">Conf: {Math.round(ca.confidence * 100)}%</span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-400">{ca.explanation}</p>
+                                {ca.reasoning_issue && (
+                                  <p className="text-xs text-red-400 bg-red-950/30 p-2 rounded border border-red-900/30">
+                                    <AlertTriangle className="w-3 h-3 inline mr-1" />
+                                    {ca.reasoning_issue}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {(result.llm_reasoning.key_strengths?.length > 0 || result.llm_reasoning.key_weaknesses?.length > 0) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                           {result.llm_reasoning.key_strengths?.length > 0 && (
+                             <div>
+                               <h4 className="text-xs font-semibold text-green-500/70 mb-2 uppercase tracking-wider">Strengths</h4>
+                               <ul className="space-y-1">
+                                 {result.llm_reasoning.key_strengths.map((s, i) => (
+                                   <li key={i} className="text-xs text-gray-300 flex items-start gap-1">
+                                     <span className="text-green-500 mt-0.5">•</span> {s}
+                                   </li>
+                                 ))}
+                               </ul>
+                             </div>
+                           )}
+                           {result.llm_reasoning.key_weaknesses?.length > 0 && (
+                             <div>
+                               <h4 className="text-xs font-semibold text-red-500/70 mb-2 uppercase tracking-wider">Weaknesses</h4>
+                               <ul className="space-y-1">
+                                 {result.llm_reasoning.key_weaknesses.map((w, i) => (
+                                   <li key={i} className="text-xs text-gray-300 flex items-start gap-1">
+                                     <span className="text-red-500 mt-0.5">•</span> {w}
+                                   </li>
+                                 ))}
+                               </ul>
+                             </div>
+                           )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </section>
